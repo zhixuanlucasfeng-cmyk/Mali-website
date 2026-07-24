@@ -700,7 +700,7 @@ const I18N = {
   }
 };
 let lang = "fr";
-const CART_ENABLED = false;
+const CART_ENABLED = true;
 window.CART_ENABLED = CART_ENABLED;
 const t = k => (I18N[lang][k] !== undefined ? I18N[lang][k] : k);
 const tr = o => (o[lang] !== undefined ? o[lang] : o.en);
@@ -1053,7 +1053,8 @@ observeReveals();
   }
 
   var AGENT_PHONE = '8618707737002';   // Tom Yang (China) — shared contact until a local rep is confirmed
-  window.CART_API_BASE = '';
+  window.CART_API_BASE = 'https://camaroom-cart-backend-mali.zhixuanlucasfeng.workers.dev';
+  window.CART_CURRENCY = 'XOF';
   window.CART_WHATSAPP_NUMBER = '';
 
   function addMsg(role, text){
