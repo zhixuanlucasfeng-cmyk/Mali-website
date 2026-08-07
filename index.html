@@ -1055,7 +1055,24 @@ observeReveals();
   var AGENT_PHONE = '8618707737002';   // Tom Yang (China) — shared contact until a local rep is confirmed
   window.CART_API_BASE = 'https://camaroom-cart-backend-mali.zhixuanlucasfeng.workers.dev';
   window.CART_CURRENCY = 'XOF';
-  window.CART_WHATSAPP_NUMBER = '';
+  window.CART_SESSION_ID = SESSION;
+  window.CART_WHATSAPP_NUMBER = AGENT_PHONE;
+  // Session-consistent sales-rep override: Mali has a live cart backend
+  // with a real seeded rep pool (5 reps, seeded 2026-07-24) — replace the
+  // Tom Yang fallback with the customer's actually-assigned local rep.
+  // No-ops (keeps the Tom Yang fallback above) on any failure, including
+  // no_active_reps — this must never be able to break page load.
+  if (window.CART_API_BASE) {
+    fetch(window.CART_API_BASE + '/api/sales-rep?session=' + encodeURIComponent(SESSION) + '&source=page_load')
+      .then(function (res) { if (!res.ok) throw new Error('no_rep'); return res.json(); })
+      .then(function (rep) {
+        if (rep && rep.phone) {
+          AGENT_PHONE = rep.phone;
+          window.CART_WHATSAPP_NUMBER = rep.phone;
+        }
+      })
+      .catch(function () {});
+  }
 
   function addMsg(role, text){
     var d = document.createElement('div');
